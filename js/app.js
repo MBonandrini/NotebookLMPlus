@@ -160,8 +160,21 @@ function bindEvents() {
   $('newConversationBtn').addEventListener('click', createNewConversationFromUi);
   $('conversationSelect').addEventListener('change', async e => { state.activeConversationId = e.target.value; await renderMessages(); });
 
-  $('addFilesBtn').addEventListener('click', addFiles);
-  $('addFolderBtn').addEventListener('click', addFolder);
+  // Use native file inputs as the primary picker. This preserves the browser's
+  // direct user gesture and is more reliable on GitHub Pages than routing the
+  // click through the File System Access API first.
+  $('addFilesBtn').addEventListener('click', () => {
+    if (!state.activeNotebookId) { alert('Create or select a notebook first.'); return; }
+    if (state.busy) return;
+    $('fileFallbackInput').value = '';
+    $('fileFallbackInput').click();
+  });
+  $('addFolderBtn').addEventListener('click', () => {
+    if (!state.activeNotebookId) { alert('Create or select a notebook first.'); return; }
+    if (state.busy) return;
+    $('directoryFallbackInput').value = '';
+    $('directoryFallbackInput').click();
+  });
   $('fileFallbackInput').addEventListener('change', e => indexFallbackFiles(e.target.files, 'files'));
   $('directoryFallbackInput').addEventListener('change', e => indexFallbackFiles(e.target.files, 'folder'));
   $('rescanSourcesBtn').addEventListener('click', rescanSources);
@@ -182,7 +195,12 @@ function bindEvents() {
 
   $('sendBtn').addEventListener('click', sendQuestion);
   $('promptInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); sendQuestion(); }
+    // Enter sends. Shift+Enter inserts a new line. Ignore IME composition so
+    // Enter can still confirm composed characters without sending the chat.
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      if (!state.busy) sendQuestion();
+    }
   });
 
   $('exportBackupBtn').addEventListener('click', exportBackup);

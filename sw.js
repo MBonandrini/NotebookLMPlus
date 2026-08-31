@@ -1,4 +1,4 @@
-const CACHE = 'notebooklmplus-v0.4.0';
+const CACHE = 'notebooklmplus-v0.4.1';
 const SHELL = [
   './', './index.html', './css/styles.css', './manifest.webmanifest',
   './js/app.js', './js/config.js', './js/db.js', './js/utils.js', './js/progress.js',

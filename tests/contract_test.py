@@ -109,3 +109,10 @@ def test_service_worker_never_caches_cross_origin_ai_calls():
     sw = (ROOT/'sw.js').read_text(encoding='utf-8')
     assert 'url.origin !== self.location.origin' in sw
     assert "'./js/ai.js'" in sw
+
+
+def test_chat_enter_sends_and_native_source_pickers_are_primary():
+    assert "e.key === 'Enter' && !e.shiftKey && !e.isComposing" in app
+    assert "$('fileFallbackInput').click()" in app
+    assert "$('directoryFallbackInput').click()" in app
+    assert 'Enter sends • Shift+Enter adds a new line' in html

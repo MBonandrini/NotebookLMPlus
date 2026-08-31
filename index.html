@@ -89,7 +89,7 @@
               </div>
               <textarea id="promptInput" rows="4" placeholder="Ask this notebook a question…"></textarea>
               <div class="composer-footer">
-                <div id="retrievalHint" class="muted">Answers cite notebook sources.</div>
+                <div id="retrievalHint" class="muted">Enter sends • Shift+Enter adds a new line • Answers cite notebook sources.</div>
                 <button id="sendBtn" class="btn primary">Send</button>
               </div>
             </div>
@@ -342,7 +342,7 @@ ollama pull embeddinggemma</code></pre>
               <h3>“Ollama offline”</h3><p>Run the automatic setup again, confirm Ollama is running, then use <strong>Test connection</strong>. For a custom deployment, confirm its exact origin is present in <code>OLLAMA_ORIGINS</code>.</p>
               <h3>Hosted AI cannot connect</h3><p>Check the HTTPS endpoint, API token, model name, and that the hosted service allows CORS from this NotebookLM+ origin.</p>
               <h3>Browser blocks localhost</h3><p>Chrome/Edge may request local-network or loopback permission. Approve it for your trusted NotebookLM+ site. If the browser cannot access localhost, use Remote Ollama or Hosted AI Engine mode.</p>
-              <h3>Folder picker unavailable</h3><p>The app falls back to a directory picker. Files are processed locally in the page; they are not sent to GitHub.</p>
+              <h3>File or folder picker does not open</h3><p>NotebookLM+ uses the browser's native file and directory inputs for maximum compatibility on GitHub Pages. Make sure a notebook is selected, then click Add files or Add folder again. Files are processed locally in the page; they are not sent to GitHub.</p>
               <h3>Responses are slow</h3><p>Switch to Lightweight mode, reduce context tokens and top-K retrieval, choose a smaller Ollama model, use Remote Ollama, or configure a hosted AI engine.</p>
             </section>
           </article>
