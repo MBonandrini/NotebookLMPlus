@@ -1,9 +1,0 @@
-{
-  "name": "NotebookLM+",
-  "short_name": "NotebookLM+",
-  "description": "Browser-first notebook research with local Ollama, remote Ollama, or hosted AI.",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#0b1020",
-  "theme_color": "#111827"
-}
