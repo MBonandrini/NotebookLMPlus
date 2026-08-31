@@ -1,4 +1,4 @@
-const CACHE = 'notebooklmplus-v0.4.1';
+const CACHE = 'notebooklmplus-v0.5.0';
 const SHELL = [
   './', './index.html', './css/styles.css', './manifest.webmanifest',
   './js/app.js', './js/config.js', './js/db.js', './js/utils.js', './js/progress.js',
@@ -20,15 +20,19 @@ self.addEventListener('fetch', event => {
   // Cache only this GitHub Pages application's own static assets. Never intercept
   // Ollama, hosted AI, CDN, or any other cross-origin/API request.
   if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
+  // Network-first prevents stale application JavaScript after a deployment,
+  // while the cache still provides an offline fallback for the static shell.
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      const network = fetch(event.request).then(response => {
-        if (response && (response.ok || response.type === 'opaque')) {
-          caches.open(CACHE).then(cache => cache.put(event.request, response.clone())).catch(() => {});
-        }
-        return response;
-      });
-      return cached || network;
-    }).catch(() => caches.match('./index.html'))
+    fetch(event.request).then(response => {
+      if (response && response.ok) {
+        caches.open(CACHE).then(cache => cache.put(event.request, response.clone())).catch(() => {});
+      }
+      return response;
+    }).catch(async () => {
+      const cached = await caches.match(event.request);
+      if (cached) return cached;
+      if (event.request.mode === 'navigate') return caches.match('./index.html');
+      throw new Error('Offline and resource is not cached.');
+    })
   );
 });
